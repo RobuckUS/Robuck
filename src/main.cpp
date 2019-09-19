@@ -40,6 +40,53 @@ Fonctions d'initialisation (setup)
 
 void setup(){
   BoardInit();
+  int32_t main_tmp_speed_test[32] = {
+    0,
+
+    0.25,
+    0.5,
+    0.75,
+    1,
+    0,
+
+    -0.25,
+    -0.5,
+    -0.75,
+    -1,
+    0,
+
+    0.25,
+    -0.25,
+    0.5,
+    -0.5,
+    0.75,
+    -0.75,
+    1,
+    -1,
+    0,
+
+    1,
+    0,
+    
+    -1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  };
+
+  for (size_t i = 0; i < 32; i++)
+  {
+    MOTOR_SetSpeed(LEFT,main_tmp_speed_test[i]);
+    MOTOR_SetSpeed(RIGHT,main_tmp_speed_test[i]);
+    delay(1000);
+  }
+
 }
 
 
