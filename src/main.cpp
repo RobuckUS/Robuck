@@ -40,19 +40,20 @@ Fonctions d'initialisation (setup)
 
 void setup(){
   BoardInit();
-  int32_t main_tmp_speed_test[32] = {
+  double main_tmp_speed_test[32] = {
     0,
 
-    0.25,
+    0.2,
+    0,
+    0.3,
+    0,
+    0.4,
+    0,
     0.5,
-    0.75,
-    1,
     0,
-
-    -0.25,
-    -0.5,
-    -0.75,
-    -1,
+    0.5,
+    0,
+    0.6,
     0,
 
     0.25,
@@ -69,8 +70,6 @@ void setup(){
     0,
     
     -1,
-    0,
-    0,
     0,
     0,
     0,
