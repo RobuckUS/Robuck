@@ -82,6 +82,15 @@ void setup(){
 
   for (size_t i = 0; i < 32; i++)
   {
+    AX_BuzzerON();
+    delay(50);
+    AX_BuzzerOFF();
+    Serial.print("\r");
+    Serial.print("i: ");
+    Serial.println(i);
+    Serial.print("Speed: ");
+    Serial.println(main_tmp_speed_test[i]);
+    Serial.print("   ");
     MOTOR_SetSpeed(LEFT,main_tmp_speed_test[i]);
     MOTOR_SetSpeed(RIGHT,main_tmp_speed_test[i]);
     delay(1000);
