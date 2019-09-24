@@ -51,5 +51,10 @@ Fonctions de boucle infini (loop())
 
 void loop() {
   // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
-  motor_walk(100);
+  motor_walk(50);
+  delay(1000);
+  motor_walk(60);
+  delay(10);
+  motor_walk(40);
+  delay(10);
 }
