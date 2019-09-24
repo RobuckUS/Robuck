@@ -18,7 +18,9 @@ int32_t cm2pulse(float cm)
 */
 void motor_walk(float distance)
 {
-    if (ENCODER_Read(LEFT) < 3200 )
+    int32_t goal = cm2pulse(distance);
+
+    if (ENCODER_Read(LEFT) < goal )
     {
         MOTOR_SetSpeed(LEFT,0.1);
     }
@@ -27,7 +29,7 @@ void motor_walk(float distance)
         MOTOR_SetSpeed(LEFT,0);
     }
     
-    if (ENCODER_Read(RIGHT) < 3200 )
+    if (ENCODER_Read(RIGHT) < goal )
     {
         MOTOR_SetSpeed(RIGHT,0.1);
     }
