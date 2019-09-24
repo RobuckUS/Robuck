@@ -3,6 +3,14 @@
 #define DIR_FORWARD 0
 #define DIR_LEFT
 
+int32_t cm2pulse(float cm)
+{
+    float in = 0.3937 * cm;
+    float nb_tour = in / 3;
+    return nb_tour * 3200;
+
+}
+
 /** Function to control the two DC motors on robots
  * 
  * @param distance, reprensents direction and distance of the robot.
