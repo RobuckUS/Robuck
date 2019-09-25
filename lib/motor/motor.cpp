@@ -3,8 +3,6 @@
 #define DIR_FORWARD 0
 //#define DIR_LEFT //TODO
 
-#define PI 3.141592653
-
 #define MOTOR_SPEED_STOP 0
 #define MOTOR_SPEED_DEBUG 0.1
 #define MOTOR_SPEED_MAX MOTOR_SPEED_DEBUG
