@@ -29,6 +29,21 @@ Vos propres fonctions sont creees ici
 void maFonction(){
   // code
 }
+void goForward(int distance){
+  
+  if(distance > 0){
+    MOTOR_SetSpeed(LEFT,0.5);
+    MOTOR_SetSpeed(RIGHT,0.5);
+    Serial.println(ENCODER_Read(0));
+    Serial.println(ENCODER_Read(1));
+  }
+  else{
+    MOTOR_SetSpeed(LEFT,0);
+    MOTOR_SetSpeed(RIGHT,0);
+    Serial.println("Stop");
+  }
+
+}
 
 
 /* ****************************************************************************
@@ -39,16 +54,20 @@ Fonctions d'initialisation (setup)
 // -> Generalement on y initilise les varibbles globales
 
 void setup(){
+  Serial.begin(9600);
   BoardInit();
 }
 
 
-/* ****************************************************************************
-Fonctions de boucle infini (loop())
-**************************************************************************** */
-// -> Se fait appeler perpetuellement suite au "setup"
-
+int D = 10000;
+int count = 0;
 void loop() {
   // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
-  delay(10);// Delais pour décharger le CPU
+  if(count < 60){
+    goForward(D);
+    D -= 5;
+    count++;
+  }
+  //Serial.println("WWWWWWWWW");
+  delay(100);// Delais pour décharger le CPU
 }
