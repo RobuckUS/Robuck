@@ -13,6 +13,7 @@ double Output;
 void computePID()
 {
   unsigned long lastTime=0;
+
   double derrivative=0;
   unsigned long now = millis();
   int timeChange = (now - lastTime);
@@ -27,8 +28,23 @@ void computePID()
   }
   lastTime=now;
 }
+void tourne180(){
+  int pulses = cm2pulse((92.5/360)*(2*18.5*PI));
+  Serial.print(pulses);
+  while(ENCODER_Read(1)<=pulses){
+    MOTOR_SetSpeed(1, 0.27);
+  }
+  MOTOR_SetSpeed(1, 0.0);
+  while(ENCODER_Read(0)>=(pulses*-1)){
+     MOTOR_SetSpeed(0, -0.27);
+  }
+  MOTOR_SetSpeed(0, 0.0);
+  ENCODER_Reset(0);
+  ENCODER_Reset(1);
+}
 void tournegauche(float angle){
-  int pulses = cm2pulse((angle/360)*(2*18.2*PI));
+  int pulses = cm2pulse((angle/360)*(2*18.5*PI));
+  
   while(ENCODER_Read(1)<=pulses){
     MOTOR_SetSpeed(1, 0.3);
     delay(10);
@@ -38,7 +54,7 @@ void tournegauche(float angle){
   ENCODER_Reset(1);
 }
 void tournedroite(float angle){
-  int pulses = cm2pulse((angle/360)*(2*18.2*PI));
+  int pulses = cm2pulse((angle/360)*(2*18.5*PI));
   while(ENCODER_Read(0)<=pulses){
     MOTOR_SetSpeed(0, 0.3);
     delay(10);
@@ -81,6 +97,7 @@ void setup(){
 }
 void loop() {
   
+  delay(200);
   avanceCM(107.5);
   delay(200);
   tournegauche(90);
@@ -91,18 +108,46 @@ void loop() {
   delay(200);
   avanceCM(77.5);
   delay(200);
-  tournedroite(40);  
+  tournedroite(37);  
   delay(200);
   avanceCM(172.5);
   delay(200);
   tournegauche(90);
   delay(200); 
-  avanceCM(55.5);
+  avanceCM(54.5);
   delay(200);
-  tournedroite(43);
+  tournedroite(40);
   delay(200);
   avanceCM(100);
   MOTOR_SetSpeed(0, 0.0);
   MOTOR_SetSpeed(1, 0.0);
-  delay(20000);
+  delay(200);
+  tourne180();
+  delay(200);
+  avanceCM(130);
+  delay(200);
+  tournegauche(48);
+  delay(200);
+  avanceCM(55.5);
+  delay(200);
+  tournedroite(90);
+  delay(200);
+  avanceCM(169);
+  delay(200);
+  tournegauche(55);  
+  delay(200);
+  avanceCM(77.5);
+  delay(200);
+  tournegauche(90);
+  delay(200);
+  avanceCM(75);
+  delay(200);
+  tournedroite(86);
+  delay(200);
+  avanceCM(117.5);
+
+
+
+
+
 } 
