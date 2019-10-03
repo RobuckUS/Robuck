@@ -43,31 +43,29 @@ void motor_walk(float distance)
         {
             MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
         }
-        else if(ENCODER_Read(LEFT) > goal)
+        else if (ENCODER_Read(LEFT) > goal)
         {
             MOTOR_SetSpeed(LEFT, -MOTOR_SPEED_MAX);
-        } 
+        }
         else
         {
             MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
             b_done_left = true;
         }
 
-        
         if (ENCODER_Read(RIGHT) < goal)
         {
             MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
         }
-        else if(ENCODER_Read(RIGHT) > goal)
+        else if (ENCODER_Read(RIGHT) > goal)
         {
-            MOTOR_SetSpeed(RIGHT,-MOTOR_SPEED_MAX);
+            MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_MAX);
         }
         else
         {
             MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
             b_done_right = true;
         }
-        
     }
 
     /*Serial.println(ENCODER_Read(LEFT));
@@ -85,6 +83,7 @@ void motor_walk(float distance)
 */
 void motor_turn(float angle)
 {
+    //init motor_turn
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     int32_t goal = angl2pulse(angle);
@@ -95,47 +94,42 @@ void motor_turn(float angle)
     Serial.println(angle);
 
     //TODO --> rentre pas dans le else quand on rentre une angle négative dans le cpp
-    if(angle > 0)
+    if (angle > 0)
     {
         while (!(b_done_right))
         {
-            if(ENCODER_Read(RIGHT) < goal)
+            if (ENCODER_Read(RIGHT) < goal)
             {
                 Serial.println("Gauche!!");
-                MOTOR_SetSpeed(RIGHT,MOTOR_SPEED_MAX);
-                MOTOR_SetSpeed(LEFT,-MOTOR_SPEED_MAX);
+                MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
+                MOTOR_SetSpeed(LEFT, -MOTOR_SPEED_MAX);
             }
             else
             {
                 MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
-                b_done_right = true;
+                b_done_left = true;
             }
         }
-        
-        
     }
     else
     {
         while (!(b_done_left))
         {
-            if(ENCODER_Read(LEFT) < goal){
+            if (ENCODER_Read(LEFT) < goal)
+            {
 
                 Serial.println("Droite!!");
-                MOTOR_SetSpeed(LEFT,MOTOR_SPEED_MAX);
-                MOTOR_SetSpeed(RIGHT,-MOTOR_SPEED_MAX);
+                MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
+                MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_MAX);
             }
             else
             {
                 MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
-                b_done_left = true;
+                b_done_right = true;
             }
         }
     }
-    
-
 }
-
-
 
 /** Function to convert centimeter to number of pulse
 */
@@ -151,9 +145,8 @@ int32_t cm2pulse(float cm)
 int32_t angl2pulse(float angle)
 {
     //float nb_tour = 3.5645654353453;
-    float distance = ((angle/2) * (2 * PI * WHEELS_DISTANCE_GUY43)) / 360;
+    float distance = ((angle / 2) * (2 * PI * WHEELS_DISTANCE_GUY43)) / 360;
     float nb_pulse = cm2pulse(distance);
     Serial.println(distance);
     return nb_pulse;
-
 }
