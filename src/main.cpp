@@ -14,23 +14,32 @@ Inclure les librairies de functions que vous voulez utiliser
 #include <LibRobus.h> // Essentielle pour utiliser RobUS
 #include <motor.h>
 
-
-
 /* ****************************************************************************
 Variables globales et defines
 **************************************************************************** */
 // -> defines...
 // L'ensemble des fonctions y ont acces
 
-
-
 /* ****************************************************************************
 Vos propres fonctions sont creees ici
 **************************************************************************** */
-void maFonction(){
+void maFonction()
+{
   // code
 }
 
+void path1()
+{
+  const int timeout = 5000;
+  motor_walk(20);
+  delay(timeout);
+  motor_turn(-90);
+  delay(timeout);
+  motor_walk(20);
+  delay(timeout);
+  motor_turn(90);
+  delay(timeout);
+}
 
 /* ****************************************************************************
 Fonctions d'initialisation (setup)
@@ -39,26 +48,19 @@ Fonctions d'initialisation (setup)
 // -> Se fait appeler seulement un fois
 // -> Generalement on y initilise les varibbles globales
 
-void setup(){
+void setup()
+{
   BoardInit();
+  Serial.begin(9600);
 }
-
 
 /* ****************************************************************************
 Fonctions de boucle infini (loop())
 **************************************************************************** */
 // -> Se fait appeler perpetuellement suite au "setup"
 
-void loop() {
+void loop()
+{
   // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
-  motor_walk(10);
-  delay(1000);
-  motor_turn(-90);
-  delay(1000);
-  motor_walk(10);
-  delay(1000);
-  motor_turn(90);
-  delay(1000);
-
-
+  path1();
 }
