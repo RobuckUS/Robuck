@@ -40,37 +40,44 @@ void motor_walk(float distance)
     Serial.println("Enter motor_walk loop");
     while (!(b_done_left && b_done_right))
     {
+        Serial.print(goal);
+        Serial.print("\t");
+        Serial.println(ENCODER_Read(LEFT));
         //Left motor
-        if (ENCODER_Read(LEFT) < goal)
+        if ((ENCODER_Read(LEFT) < goal) && (0 < goal))
         {
             MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
         }
-        else if (ENCODER_Read(LEFT) > goal)
+        else if ((ENCODER_Read(LEFT) > goal) && (0 > goal))
         {
             MOTOR_SetSpeed(LEFT, -MOTOR_SPEED_MAX);
         }
         else
         {
             MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
+            Serial.println("LEFT goal accessed");
             b_done_left = true;
         }
 
         //Right motor
-        if (ENCODER_Read(RIGHT) < goal)
+        if ((ENCODER_Read(RIGHT) < goal) && (0 < goal))
         {
             MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
         }
-        else if (ENCODER_Read(RIGHT) > goal)
+        else if ((ENCODER_Read(RIGHT) > goal) && (0 > goal))
         {
             MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_MAX);
         }
         else
         {
             MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
+            Serial.println("RIGHT goal accessed");
             b_done_right = true;
         }
     }
     Serial.println("Exit motor_walk loop");
+    MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
+    MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
 
     /*Serial.println(ENCODER_Read(LEFT));
     Serial.println(ENCODER_Read(RIGHT));
@@ -87,6 +94,7 @@ void motor_walk(float distance)
 */
 void motor_turn(float angle)
 {
+    Serial.println("Enter motor_turn init");
     //init motor_turn
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
@@ -104,6 +112,7 @@ void motor_turn(float angle)
         //Left motor
         if (ENCODER_Read(LEFT) < goal)
         {
+            Serial.println("+  ");
             MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
         }
         else if (ENCODER_Read(LEFT) > goal)
@@ -132,6 +141,8 @@ void motor_turn(float angle)
         }
     }
     Serial.println("Exit motor_turn loop");
+    MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
+    MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
 }
 
 /** Convert centimeter to number of pulse
