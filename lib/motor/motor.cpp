@@ -21,7 +21,7 @@
 int32_t cm2pulse(float cm);
 int32_t angl2pulse(float angle);
 
-/** Function to control the two DC motors on robots
+/** Control two DC motors to go forward
  * 
  * @param distance, reprensents direction and distance of the robot.
  * floating value in centimer between [-1.0, 1.0]
@@ -37,8 +37,10 @@ void motor_walk(float distance)
     bool b_done_right = false;
 
     //loop motor_walk
+    Serial.println("Enter motor_walk loop");
     while (!(b_done_left && b_done_right))
     {
+        //Left motor
         if (ENCODER_Read(LEFT) < goal)
         {
             MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
@@ -53,6 +55,7 @@ void motor_walk(float distance)
             b_done_left = true;
         }
 
+        //Right motor
         if (ENCODER_Read(RIGHT) < goal)
         {
             MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
@@ -67,6 +70,7 @@ void motor_walk(float distance)
             b_done_right = true;
         }
     }
+    Serial.println("Exit motor_walk loop");
 
     /*Serial.println(ENCODER_Read(LEFT));
     Serial.println(ENCODER_Read(RIGHT));
@@ -76,10 +80,10 @@ void motor_walk(float distance)
     //MOTOR_SetSpeed(RIGHT,speed);
 }
 
-/** Function to control the two DC motors on robots
+/** Control two DC motors to turn
  * 
- * @param angle, reprensents the angle of the robot relative to it direction and distance of the robot.
- * floating value in degree between [-1.0, 1.0]
+ * @param angle, reprensents the angle of the robot relative to it direction.
+ * floating value in degree (left is negative, right is positive)
 */
 void motor_turn(float angle)
 {
@@ -93,54 +97,53 @@ void motor_turn(float angle)
 
     Serial.println(angle);
 
-    //TODO --> rentre pas dans le else quand on rentre une angle négative dans le cpp
-    if (angle > 0)
+    //loop motor_turn
+    Serial.println("Enter motor_turn loop");
+    while (!(b_done_left && b_done_right))
     {
-        while (!(b_done_right))
+        //Left motor
+        if (ENCODER_Read(LEFT) < goal)
         {
-            if (ENCODER_Read(RIGHT) < goal)
-            {
-                Serial.println("Gauche!!");
-                MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
-                MOTOR_SetSpeed(LEFT, -MOTOR_SPEED_MAX);
-            }
-            else
-            {
-                MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
-                b_done_left = true;
-            }
+            MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
         }
-    }
-    else
-    {
-        while (!(b_done_left))
+        else if (ENCODER_Read(LEFT) > goal)
         {
-            if (ENCODER_Read(LEFT) < goal)
-            {
+            MOTOR_SetSpeed(LEFT, -MOTOR_SPEED_MAX);
+        }
+        else
+        {
+            MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
+            b_done_left = true;
+        }
 
-                Serial.println("Droite!!");
-                MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
-                MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_MAX);
-            }
-            else
-            {
-                MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
-                b_done_right = true;
-            }
+        //Right motor
+        if (ENCODER_Read(RIGHT) < (-goal))
+        {
+            MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
+        }
+        else if (ENCODER_Read(RIGHT) > (-goal))
+        {
+            MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_MAX);
+        }
+        else
+        {
+            MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
+            b_done_right = true;
         }
     }
+    Serial.println("Exit motor_turn loop");
 }
 
-/** Function to convert centimeter to number of pulse
+/** Convert centimeter to number of pulse
 */
 int32_t cm2pulse(float cm)
 {
-    float in = 0.3937 * cm;
-    float nb_tour = in / (3 * PI);
+    float nb_tour = (0.3937 * cm) / (3 * PI);
     return nb_tour * 3200;
 }
 
-/** Function to convert angle to number of pulse
+/** Convert angle (degree) to number of pulse
+ * 
 */
 int32_t angl2pulse(float angle)
 {
