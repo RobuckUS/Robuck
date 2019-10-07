@@ -31,13 +31,13 @@ void maFonction()
 void path1()
 {
   const int timeout = 2000;
-  motor_walk(-20);
-  delay(timeout);
-  motor_turn(-90);
-  delay(timeout);
   motor_walk(20);
   delay(timeout);
   motor_turn(90);
+  delay(timeout);
+  motor_walk(-10);
+  delay(timeout);
+  motor_turn(-90);
   delay(timeout);
 }
 
@@ -52,6 +52,7 @@ void setup()
 {
   BoardInit();
   Serial.begin(9600);
+  Serial.println("---BEGIN---");
 }
 
 /* ****************************************************************************

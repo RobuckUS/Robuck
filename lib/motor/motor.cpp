@@ -9,7 +9,7 @@
 #endif
 
 #define MOTOR_SPEED_STOP 0
-#define MOTOR_SPEED_DEBUG 0.1
+#define MOTOR_SPEED_DEBUG 0.2
 #define MOTOR_SPEED_MAX MOTOR_SPEED_DEBUG
 
 #define WHEELS_DISTANCE_GUY43 18.5
@@ -20,6 +20,15 @@
 
 int32_t cm2pulse(float cm);
 int32_t angl2pulse(float angle);
+
+//PID constants
+float g_kp = 5E-4;
+float g_ki = 1E-7;
+float g_kd = 0;
+
+int32_t g_setPoint;
+
+float computePID(int32_t input);
 
 /** Control two DC motors to go forward
  * 
@@ -32,17 +41,48 @@ void motor_walk(float distance)
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     int32_t goal = cm2pulse(distance);
+    float speed_out = 0;
+    int32_t enc_l = 0;
+    int32_t enc_r = 0;
+    int32_t delta = 0;
 
     bool b_done_left = false;
     bool b_done_right = false;
 
+    g_setPoint = 0;
+
     //loop motor_walk
     Serial.println("Enter motor_walk loop");
+    MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
+    MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
     while (!(b_done_left && b_done_right))
     {
+        enc_l = ENCODER_Read(LEFT);
+        enc_r = ENCODER_Read(RIGHT);
+        delta = enc_r - enc_l;
+
+        speed_out = computePID(delta);
+        delay(100);
+        /*
+        Serial.print("Goal: ");
         Serial.print(goal);
         Serial.print("\t");
-        Serial.println(ENCODER_Read(LEFT));
+
+        Serial.print("Enc_L: ");
+        Serial.print(enc_l);
+        Serial.print("\t");
+
+        Serial.print("Enc_R: ");
+        Serial.print(enc_r);
+        Serial.print("\t");
+
+        Serial.print("Delta: ");
+        Serial.print(delta);
+        Serial.print("\t");
+
+        Serial.print("Speed: ");
+        Serial.println(speed_out);
+*/
         //Left motor
         if ((ENCODER_Read(LEFT) < goal) && (0 < goal))
         {
@@ -62,11 +102,11 @@ void motor_walk(float distance)
         //Right motor
         if ((ENCODER_Read(RIGHT) < goal) && (0 < goal))
         {
-            MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
+            MOTOR_SetSpeed(RIGHT, speed_out);
         }
         else if ((ENCODER_Read(RIGHT) > goal) && (0 > goal))
         {
-            MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_MAX);
+            MOTOR_SetSpeed(RIGHT, -speed_out);
         }
         else
         {
@@ -143,6 +183,35 @@ void motor_turn(float angle)
     Serial.println("Exit motor_turn loop");
     MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
     MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
+}
+
+/** Compute PID
+*/
+float computePID(int32_t input)
+{
+    static unsigned long currentTime;
+    static unsigned long previousTime;
+    static int32_t elapsedTime;
+
+    static int32_t error;
+    static int32_t lastError;
+
+    static int32_t cumError;
+    static int32_t rateError;
+
+    currentTime = millis();
+    elapsedTime = currentTime - previousTime;
+
+    error = g_setPoint - input;                    // determine error
+    cumError += error * elapsedTime;               // compute integral
+    rateError = (error - lastError) / elapsedTime; // compute derivative
+
+    float output = (g_kp * error) + (g_ki * cumError) + (g_kd * rateError); //PID output
+
+    lastError = error;
+    previousTime = currentTime;
+
+    return output;
 }
 
 /** Convert centimeter to number of pulse
