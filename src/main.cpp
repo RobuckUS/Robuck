@@ -92,6 +92,6 @@ void loop()
 {
   // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
   delay(500);
-  motor_turn(4*360);
+  motor_turn(4 * 360);
   //pathPrep1();
 }
