@@ -9,10 +9,10 @@
 #endif
 
 #define MOTOR_SPEED_STOP 0
-#define MOTOR_SPEED_DEBUG 0.2
+#define MOTOR_SPEED_DEBUG 0.35
 #define MOTOR_SPEED_MAX MOTOR_SPEED_DEBUG
 
-#define WHEELS_DISTANCE_GUY43 18.5
+#define WHEELS_DISTANCE_GUY43 18.45
 
 /*#ifdef __GUY43__
 #define WHEELS_DISTANCE_GUY43 18.5
@@ -22,9 +22,9 @@ int32_t cm2pulse(float cm);
 int32_t angl2pulse(float angle);
 
 //PID constants
-float g_kp = 5E-4;
-float g_ki = 1E-7;
-float g_kd = 0;
+const float g_kp = 7E-4;
+const float g_ki = 4E-7;
+const float g_kd = 0;
 
 int32_t g_setPoint;
 
@@ -41,7 +41,7 @@ void motor_walk(float distance)
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     int32_t goal = cm2pulse(distance);
-    float speed_out = 0;
+    float speed_correction = 0;
     int32_t enc_l = 0;
     int32_t enc_r = 0;
     int32_t delta = 0;
@@ -61,8 +61,7 @@ void motor_walk(float distance)
         enc_r = ENCODER_Read(RIGHT);
         delta = enc_r - enc_l;
 
-        speed_out = computePID(delta);
-        delay(100);
+        speed_correction = computePID(delta);
         /*
         Serial.print("Goal: ");
         Serial.print(goal);
@@ -102,11 +101,11 @@ void motor_walk(float distance)
         //Right motor
         if ((ENCODER_Read(RIGHT) < goal) && (0 < goal))
         {
-            MOTOR_SetSpeed(RIGHT, speed_out);
+            MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX + speed_correction);
         }
         else if ((ENCODER_Read(RIGHT) > goal) && (0 > goal))
         {
-            MOTOR_SetSpeed(RIGHT, -speed_out);
+            MOTOR_SetSpeed(RIGHT, -(MOTOR_SPEED_MAX + speed_correction));
         }
         else
         {
@@ -125,6 +124,7 @@ void motor_walk(float distance)
 
     //MOTOR_SetSpeed(LEFT,speed);
     //MOTOR_SetSpeed(RIGHT,speed);
+    delay(100);
 }
 
 /** Control two DC motors to turn
@@ -183,6 +183,7 @@ void motor_turn(float angle)
     Serial.println("Exit motor_turn loop");
     MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
     MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
+    delay(100);
 }
 
 /** Compute PID
