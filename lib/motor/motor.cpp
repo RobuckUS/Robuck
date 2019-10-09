@@ -2,29 +2,33 @@
 
 #include "motor.h"
 
-#define DIR_FORWARD 0
+#define JEAN 31
+#define GUY 43
 
-#if 0
-#define DIR_LEFT //TODO
-#endif
+#define __ROBOT__ GUY
 
 #define MOTOR_SPEED_STOP 0
-#define MOTOR_SPEED_DEBUG 0.35
-#define MOTOR_SPEED_MAX MOTOR_SPEED_DEBUG
-
-#define WHEELS_DISTANCE_GUY43 18.45
-
-/*#ifdef __GUY43__
-#define WHEELS_DISTANCE_GUY43 18.5
-#endif*/
+#define MOTOR_SPEED_MAX 0.35
+#define MOTOR_SPEED_TURN 0.2
 
 int32_t cm2pulse(float cm);
 int32_t angl2pulse(float angle);
 
-//PID constants
+#if (__ROBOT__ == JEAN)
+const float wheels_diameter = WHEELS_DIAMETER_JEAN31;
+const float wheels_distance = WHEELS_DISTANCE_JEAN31;
+const float g_kp = PID_KP_JEAN31;
+const float g_ki = PID_KI_JEAN31;
+const float g_kd = PID_KD_JEAN31;
+#elif (__ROBOT__ == GUY)
+const float wheels_diameter = 3;
+const float wheels_distance = 18.45;
 const float g_kp = 7E-4;
 const float g_ki = 4E-7;
 const float g_kd = 0;
+#else
+#error "Please specify a target robot (__ROBOT__)"
+#endif
 
 int32_t g_setPoint;
 
@@ -62,7 +66,8 @@ void motor_walk(float distance)
         delta = enc_r - enc_l;
 
         speed_correction = computePID(delta);
-        /*
+
+#if 0
         Serial.print("Goal: ");
         Serial.print(goal);
         Serial.print("\t");
@@ -81,7 +86,8 @@ void motor_walk(float distance)
 
         Serial.print("Speed: ");
         Serial.println(speed_out);
-*/
+#endif
+
         //Left motor
         if ((ENCODER_Read(LEFT) < goal) && (0 < goal))
         {
@@ -117,13 +123,6 @@ void motor_walk(float distance)
     Serial.println("Exit motor_walk loop");
     MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
     MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
-
-    /*Serial.println(ENCODER_Read(LEFT));
-    Serial.println(ENCODER_Read(RIGHT));
-    Serial.println("\n");*/
-
-    //MOTOR_SetSpeed(LEFT,speed);
-    //MOTOR_SetSpeed(RIGHT,speed);
     delay(100);
 }
 
@@ -153,11 +152,11 @@ void motor_turn(float angle)
         if (ENCODER_Read(LEFT) < goal)
         {
             Serial.println("+  ");
-            MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
+            MOTOR_SetSpeed(LEFT, MOTOR_SPEED_TURN);
         }
         else if (ENCODER_Read(LEFT) > goal)
         {
-            MOTOR_SetSpeed(LEFT, -MOTOR_SPEED_MAX);
+            MOTOR_SetSpeed(LEFT, -MOTOR_SPEED_TURN);
         }
         else
         {
@@ -168,11 +167,11 @@ void motor_turn(float angle)
         //Right motor
         if (ENCODER_Read(RIGHT) < (-goal))
         {
-            MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
+            MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_TURN);
         }
         else if (ENCODER_Read(RIGHT) > (-goal))
         {
-            MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_MAX);
+            MOTOR_SetSpeed(RIGHT, -MOTOR_SPEED_TURN);
         }
         else
         {
@@ -219,7 +218,7 @@ float computePID(int32_t input)
 */
 int32_t cm2pulse(float cm)
 {
-    float nb_tour = (0.3937 * cm) / (3 * PI);
+    float nb_tour = (0.3937 * cm) / (wheels_diameter * PI);
     return nb_tour * 3200;
 }
 
@@ -229,7 +228,7 @@ int32_t cm2pulse(float cm)
 int32_t angl2pulse(float angle)
 {
     //float nb_tour = 3.5645654353453;
-    float distance = ((angle / 2) * (2 * PI * WHEELS_DISTANCE_GUY43)) / 360;
+    float distance = ((angle / 2) * (2 * PI * wheels_distance)) / 360;
     float nb_pulse = cm2pulse(distance);
     Serial.println(distance);
     return nb_pulse;
