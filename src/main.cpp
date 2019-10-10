@@ -10,6 +10,17 @@ Variables globales et defines
 Fonctions
 **************************************************************************** */
 
+void waitBumper()
+{
+  while (!ROBUS_IsBumper(REAR))
+  {
+  }
+
+  AX_BuzzerON();
+  delay(100);
+  AX_BuzzerOFF();
+}
+
 void pathDemo1()
 {
   const int timeout = 2000;
@@ -160,13 +171,16 @@ Fonctions de boucle infini (loop())
 void loop()
 {
   // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
+
+  waitBumper();
+
   delay(500);
-
   pathReal();
+  waitBumper();
   pathTurnAround();
 
+  waitBumper();
   pathRealRewind();
+  waitBumper();
   pathTurnAround();
-
-  delay(2000000);
 }
