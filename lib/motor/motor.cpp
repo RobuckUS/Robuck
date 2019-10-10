@@ -153,6 +153,8 @@ void motor_turn(float angle)
 
     Serial.println(angle);
 
+    AX_BuzzerON();
+
     //loop motor_turn
     Serial.println("Enter motor_turn loop");
     while (!(b_done_left && b_done_right))
@@ -191,6 +193,7 @@ void motor_turn(float angle)
     Serial.println("Exit motor_turn loop");
     MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
     MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
+    AX_BuzzerOFF();
     delay(300);
 }
 

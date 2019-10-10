@@ -16,8 +16,16 @@ void waitBumper()
   {
   }
 
+  for (int i = 0; i < 3; i++)
+  {
+    AX_BuzzerON();
+    delay(200);
+    AX_BuzzerOFF();
+    delay(800);
+  }
+
   AX_BuzzerON();
-  delay(100);
+  delay(1000);
   AX_BuzzerOFF();
 }
 
@@ -114,43 +122,59 @@ void pathEmpty()
 
 void pathTurnAround()
 {
-  motor_walk(45);  //Go out of the box
   motor_turn(180); //Turn around
-  motor_walk(45);  //Go back near the box
 }
 
 void pathReal()
 {
-  motor_walk(100 + 45 / 2);
-  motor_turn(0);
+  motor_walk(205 + 3 + 45 / 2);
+  motor_turn(-90);
 
-  motor_walk(0);
-  motor_turn(0);
+  motor_walk(100);
+  motor_turn(90);
 
-  motor_walk(0);
-  motor_turn(0);
+  motor_walk(45);
+  motor_turn(90);
 
-  motor_walk(0);
-  motor_turn(0);
+  motor_walk(55);
+  motor_turn(-88);
 
-  motor_walk(100 + 45 / 2);
+  motor_walk(105);
+  motor_turn(90);
+
+  motor_walk(45 + 1);
+  motor_turn(-88);
+
+  motor_walk(145);
 }
 
 void pathRealRewind()
 {
-  motor_walk(100 + 45 / 2);
-  motor_turn(0);
+  motor_walk(145 + 105 + 45);
+  motor_turn(2 * 360);
+}
 
-  motor_walk(0);
-  motor_turn(0);
+void pathRealRewindWithoutBall()
+{
+  motor_walk(145);
+  motor_turn(90);
 
-  motor_walk(0);
-  motor_turn(0);
+  motor_walk(45 + 1);
+  motor_turn(-90);
 
-  motor_walk(0);
-  motor_turn(0);
+  motor_walk(105);
+  motor_turn(90);
 
-  motor_walk(100 + 45 / 2);
+  motor_walk(55 + 2);
+  motor_turn(-90);
+
+  motor_walk(45);
+  motor_turn(-90);
+
+  motor_walk(100);
+  motor_turn(-90);
+
+  motor_walk(205 + 3 + 45 / 2);
 }
 
 /* ****************************************************************************
@@ -174,13 +198,9 @@ void loop()
 
   waitBumper();
 
-  delay(500);
   pathReal();
-  waitBumper();
   pathTurnAround();
 
-  waitBumper();
   pathRealRewind();
-  waitBumper();
   pathTurnAround();
 }
