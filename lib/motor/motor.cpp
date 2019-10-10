@@ -8,17 +8,17 @@
 
 #define MOTOR_SPEED_STOP 0
 #define MOTOR_SPEED_MAX 0.35
-#define MOTOR_SPEED_TURN 0.2
+#define MOTOR_SPEED_TURN 0.25
 
 int32_t cm2pulse(float cm);
 int32_t angl2pulse(float angle);
 
 #if (__ROBOT__ == JEAN)
-const float wheels_diameter = WHEELS_DIAMETER_JEAN31;
-const float wheels_distance = WHEELS_DISTANCE_JEAN31;
-const float g_kp = PID_KP_JEAN31;
-const float g_ki = PID_KI_JEAN31;
-const float g_kd = PID_KD_JEAN31;
+const float wheels_diameter = 3;
+const float wheels_distance = 18.45;
+const float g_kp = 7E-4;
+const float g_ki = 4E-7;
+const float g_kd = 0;
 #elif (__ROBOT__ == GUY)
 const float wheels_diameter = 3;
 const float wheels_distance = 18.45;
@@ -26,10 +26,15 @@ const float g_kp = 7E-4;
 const float g_ki = 4E-7;
 const float g_kd = 0;
 #else
-#error "Please specify a target robot (__ROBOT__)"
+#error "Please specify a valid target robot (__ROBOT__)"
 #endif
 
-int32_t g_setPoint;
+// Communication setup
+const long serialPing = 500;
+unsigned long now = 0;
+unsigned long lastMessage = 0;
+
+int32_t g_setPoint = 0;
 
 float computePID(int32_t input);
 
@@ -66,6 +71,9 @@ void motor_walk(float distance)
 
         speed_correction = computePID(delta);
 
+        now = millis();
+        if (now - lastMessage > serialPing)
+        {
 #if 0
         Serial.print("Goal: ");
         Serial.print(goal);
@@ -86,6 +94,8 @@ void motor_walk(float distance)
         Serial.print("Speed: ");
         Serial.println(speed_out);
 #endif
+            lastMessage = now;
+        }
 
         //Left motor
         if ((ENCODER_Read(LEFT) < goal) && (0 < goal))
@@ -122,7 +132,7 @@ void motor_walk(float distance)
     Serial.println("Exit motor_walk loop");
     MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
     MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
-    delay(100);
+    delay(300);
 }
 
 /** Control two DC motors to turn
@@ -181,7 +191,7 @@ void motor_turn(float angle)
     Serial.println("Exit motor_turn loop");
     MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
     MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
-    delay(100);
+    delay(300);
 }
 
 /** Compute PID
@@ -222,7 +232,6 @@ int32_t cm2pulse(float cm)
 }
 
 /** Convert angle (degree) to number of pulse
- * 
 */
 int32_t angl2pulse(float angle)
 {
