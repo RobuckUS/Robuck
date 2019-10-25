@@ -20,6 +20,8 @@ Fonctions d'initialisation
 void setup()
 {
   BoardInit();
+  Serial.begin(9600);
+  Serial.println("\n\n---RESET---\n");
 }
 
 /* ****************************************************************************
