@@ -4,6 +4,7 @@ Inclure les librairies de functions que vous voulez utiliser
 
 #include <Arduino.h>
 #include <LibRobus.h> // Essentielle pour utiliser RobUS
+#include <sens.h>
 
 /* ****************************************************************************
 Variables globales et defines
