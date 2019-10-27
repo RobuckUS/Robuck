@@ -3,7 +3,6 @@
 #include <Adafruit_TCS34725.h>
 
 #define COLOR_RESOLUTION 10
-#define DEBUG 1
 
 /* Initialise with default values (int time = 2.4ms, gain = 1x) */
 // Adafruit_TCS34725 tcs = Adafruit_TCS34725();
@@ -27,7 +26,7 @@ void sensInitColor()
     }
 }
 
-sensColor_t sensGetColor()
+coreColor_t sensGetColor()
 {
     static Adafruit_TCS34725 tcs;
 
