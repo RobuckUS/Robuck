@@ -2,6 +2,7 @@
 #include <LibRobus.h>
 #include <Adafruit_TCS34725.h>
 
+#define DEBUG 1
 #define COLOR_RESOLUTION 10
 
 /* Initialise with default values (int time = 2.4ms, gain = 1x) */
@@ -12,7 +13,7 @@ Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_101MS, TCS347
 
 void sensInitColor()
 {
-    static Adafruit_TCS34725 tcs;
+    extern Adafruit_TCS34725 tcs;
 
     if (tcs.begin())
     {
@@ -28,50 +29,53 @@ void sensInitColor()
 
 coreColor_t sensGetColor()
 {
-    static Adafruit_TCS34725 tcs;
+    extern Adafruit_TCS34725 tcs;
 
     // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
 
-    uint16_t r, g, b, c, colorTemp, lux;
+    uint16_t red, gre, blu, clear, colorTemp, lux;
 
-    tcs.getRawData(&r, &g, &b, &c);
-    colorTemp = tcs.calculateColorTemperature(r, g, b);
-    lux = tcs.calculateLux(r, g, b);
+    tcs.getRawData(&red, &gre, &blu, &clear);
+    colorTemp = tcs.calculateColorTemperature(red, gre, blu);
+    lux = tcs.calculateLux(red, gre, blu);
 
-    int frac_r = (int)((float)r / (uint32_t)c) * COLOR_RESOLUTION;
-    int frac_g = (int)((float)g / (uint32_t)c) * COLOR_RESOLUTION;
-    int frac_b = (int)((float)b / (uint32_t)c) * COLOR_RESOLUTION;
+    int r_frac = (int)(((float)red / (uint32_t)clear) * COLOR_RESOLUTION);
+    int g_frac = (int)(((float)gre / (uint32_t)clear) * COLOR_RESOLUTION);
+    int b_frac = (int)(((float)blu / (uint32_t)clear) * COLOR_RESOLUTION);
 
-    if (3 <= frac_r &&
-        2 >= frac_g &&
-        3 >= frac_b) //Detect RED
+    if (3 <= r_frac &&
+        2 >= g_frac &&
+        3 >= b_frac) //Detect RED
     {
 #if DEBUG
         Serial.println("RED detected");
 #endif
         return RED;
     }
-    else if (2 >= frac_r &&
-             3 <= frac_g &&
-             3 >= frac_b) //Detect GREEN
+    else if (2 >= r_frac &&
+             3 <= g_frac &&
+             3 >= b_frac &&
+             12000 <= colorTemp &&
+             15000 >= colorTemp) //Detect GREEN
     {
 #if DEBUG
         Serial.println("GREEN detected");
 #endif
         return GREEN;
     }
-    else if (2 >= frac_r &&
-             3 >= frac_g &&
-             4 <= frac_b) //Detect BLUE
+    else if (2 >= r_frac &&
+             3 >= g_frac &&
+             4 <= b_frac) //Detect BLUE
     {
 #if DEBUG
         Serial.println("BLUE detected");
 #endif
         return BLUE;
     }
-    else if (2 <= frac_r &&
-             3 <= frac_g &&
-             3 >= frac_b) //Detect YELLOW
+    else if (2 <= r_frac &&
+             3 <= g_frac &&
+             3 >= b_frac &&
+             6000 >= colorTemp) //Detect YELLOW
     {
 #if DEBUG
         Serial.println("YELLOW detected");
@@ -91,20 +95,20 @@ coreColor_t sensGetColor()
 
         Serial.print("\t");
         Serial.print("RGB: ");
-        Serial.print(r, DEC);
+        Serial.print(red, DEC);
         Serial.print(" ");
-        Serial.print(g, DEC);
+        Serial.print(gre, DEC);
         Serial.print(" ");
-        Serial.print(b, DEC);
+        Serial.print(blu, DEC);
 
         Serial.print("\t");
         Serial.print("C: ");
-        Serial.print(c, DEC);
+        Serial.print(clear, DEC);
 
         Serial.print("\t\t#");
-        Serial.print((int)frac_r, HEX);
-        Serial.print((int)frac_g, HEX);
-        Serial.print((int)frac_b, HEX);
+        Serial.print((int)r_frac, HEX);
+        Serial.print((int)g_frac, HEX);
+        Serial.print((int)b_frac, HEX);
         Serial.println();
 #endif
         return OTHER_COLOR;

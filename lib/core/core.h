@@ -1,8 +1,6 @@
 #ifndef CORE_H_
 #define CORE_H_
 
-#define DEBUG 1
-
 #define coreColorNameMASK 0x03;    //0b 0000 0011
 #define coreColorXMask 0x02;       //0b 0000 0010
 #define coreColorYMask 0x01;       //0b 0000 0001
