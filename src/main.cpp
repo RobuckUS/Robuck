@@ -19,9 +19,9 @@ Fonctions d'initialisation
 
 void setup()
 {
-  BoardInit();
-  Serial.begin(9600);
-  Serial.println("\n\n---RESET---\n");
+    BoardInit();
+    Serial.begin(9600);
+    Serial.println("\n\n---RESET---\n");
 }
 
 /* ****************************************************************************
@@ -30,5 +30,5 @@ Fonctions de boucle infini
 
 void loop()
 {
-  // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
+    // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
 }
