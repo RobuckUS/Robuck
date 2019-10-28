@@ -24,6 +24,9 @@ void setup()
     sensInitColor();
     Serial.begin(9600);
     Serial.println("\n\n---RESET---\n");
+
+    while (!ROBUS_IsBumper(REAR))
+        ;
 }
 
 /* ****************************************************************************

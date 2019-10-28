@@ -85,6 +85,7 @@ coreColor_t sensGetColor()
     else
     {
 #if DEBUG
+        Serial.print("\t");
         Serial.print("Color Temp: ");
         Serial.print(colorTemp, DEC);
         Serial.print(" K");
@@ -113,4 +114,73 @@ coreColor_t sensGetColor()
 #endif
         return OTHER_COLOR;
     }
+}
+
+void sensFollowLineIR()
+{
+
+    // Add code from https://create.arduino.cc/projecthub/mjrobot/line-follower-robot-pid-control-android-setup-e5113a
+
+    int error;
+
+    const int lineFollowSensor0 = 22;
+    const int lineFollowSensor1 = 24;
+    const int lineFollowSensor2 = 26;
+
+    int LFSensor[3] = {0, 0, 0};
+
+    LFSensor[0] = digitalRead(lineFollowSensor0);
+    LFSensor[1] = digitalRead(lineFollowSensor1);
+    LFSensor[2] = digitalRead(lineFollowSensor2);
+
+    /*
+    0 0 1 ==> Error = 2
+    0 1 1 ==> Error = 1
+    0 1 0 ==> Error = 0
+    1 1 0 ==> Error = -1
+    1 0 0 ==> Error = -2
+    */
+
+#if DEBUG
+    Serial.print(LFSensor[0]);
+    Serial.print(" ");
+    Serial.print(LFSensor[1]);
+    Serial.print(" ");
+    Serial.print(LFSensor[2]);
+    Serial.println();
+#endif
+
+    if ((LFSensor[0] == 0) &&
+        (LFSensor[1] == 0) &&
+        (LFSensor[2] == 1))
+        error = 2;
+    else if ((LFSensor[0] == 0) &&
+             (LFSensor[1] == 1) &&
+             (LFSensor[2] == 1))
+        error = 1;
+    else if ((LFSensor[0] == 0) &&
+             (LFSensor[1] == 1) &&
+             (LFSensor[2] == 0))
+        error = 0;
+    else if ((LFSensor[0] == 1) &&
+             (LFSensor[1] == 1) &&
+             (LFSensor[2] == 0))
+        error = -1;
+    else if ((LFSensor[0] == 1) &&
+             (LFSensor[1] == 0) &&
+             (LFSensor[2] == 0))
+        error = -2;
+
+    else
+    {
+        error = 0;
+        AX_BuzzerON();
+        delay(200);
+        AX_BuzzerOFF();
+        delay(50);
+    }
+
+    float Kp = 0.05;
+    MOTOR_SetSpeed(LEFT, 0.1 + (Kp * error));
+    MOTOR_SetSpeed(RIGHT, 0.1 - (Kp * error));
 }

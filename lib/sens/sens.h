@@ -5,5 +5,6 @@
 
 void sensInitColor();
 coreColor_t sensGetColor();
+void sensFollowLineIR();
 
 #endif
