@@ -142,11 +142,16 @@ void sens_followLineIR()
     LFSensor[2] = digitalRead(lineFollowSensor2);
 
     /*
-    0 0 1 ==> Error = 2
-    0 1 1 ==> Error = 1
-    0 1 0 ==> Error = 0
-    1 1 0 ==> Error = -1
-    1 0 0 ==> Error = -2
+
+    . = WHITE_NOT_LINE
+    0 = BLACK_LINE
+    
+    . . 0 ==> Error = 2
+    . 0 0 ==> Error = 1
+    . 0 . ==> Error = 0
+    0 0 . ==> Error = -1
+    0 . . ==> Error = -2
+
     */
 
 #if SENS_DEBUG
@@ -158,25 +163,25 @@ void sens_followLineIR()
     Serial.println();
 #endif
 
-    if ((LFSensor[0] == 0) &&
-        (LFSensor[1] == 0) &&
-        (LFSensor[2] == 1))
+    if ((LFSensor[0] == WHITE_NOT_LINE) &&
+        (LFSensor[1] == WHITE_NOT_LINE) &&
+        (LFSensor[2] == BLACK_LINE))
         error = 2;
-    else if ((LFSensor[0] == 0) &&
-             (LFSensor[1] == 1) &&
-             (LFSensor[2] == 1))
+    else if ((LFSensor[0] == WHITE_NOT_LINE) &&
+             (LFSensor[1] == BLACK_LINE) &&
+             (LFSensor[2] == BLACK_LINE))
         error = 1;
-    else if ((LFSensor[0] == 0) &&
-             (LFSensor[1] == 1) &&
-             (LFSensor[2] == 0))
+    else if ((LFSensor[0] == WHITE_NOT_LINE) &&
+             (LFSensor[1] == BLACK_LINE) &&
+             (LFSensor[2] == WHITE_NOT_LINE))
         error = 0;
-    else if ((LFSensor[0] == 1) &&
-             (LFSensor[1] == 1) &&
-             (LFSensor[2] == 0))
+    else if ((LFSensor[0] == BLACK_LINE) &&
+             (LFSensor[1] == BLACK_LINE) &&
+             (LFSensor[2] == WHITE_NOT_LINE))
         error = -1;
-    else if ((LFSensor[0] == 1) &&
-             (LFSensor[1] == 0) &&
-             (LFSensor[2] == 0))
+    else if ((LFSensor[0] == BLACK) &&
+             (LFSensor[1] == WHITE_NOT_LINE) &&
+             (LFSensor[2] == WHITE_NOT_LINE))
         error = -2;
     else
     {
