@@ -3,8 +3,8 @@
 
 #include "combat.h"
 
-void sensInit();
-combat_color_t sensGetColor();
-void sensFollowLineIR();
+void sens_init();
+combat_color_t sens_getColor();
+void sens_followLineIR();
 
 #endif

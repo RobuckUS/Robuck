@@ -21,12 +21,12 @@ Fonctions d'initialisation
 void setup()
 {
     BoardInit();
-    sensInitColor();
+    sens_init();
     Serial.begin(9600);
     Serial.println("\n\n---RESET---\n");
 
     while (!ROBUS_IsBumper(REAR))
-        ;
+        ; //Wait for rear bumper press
 }
 
 /* ****************************************************************************

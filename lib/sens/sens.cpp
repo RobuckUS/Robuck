@@ -2,16 +2,16 @@
 #include <LibRobus.h>
 #include <Adafruit_TCS34725.h>
 
-#define DEBUG 1
+#define SENS_DEBUG 1
 const int SENS_COLOR_RESOLUTION = 10;
 
 /* Initialise with default values (int time = 2.4ms, gain = 1x) */
 // Adafruit_TCS34725 tcs = Adafruit_TCS34725();
 
 /* Initialise with specific int time and gain values */
-Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_101MS, TCS34725_GAIN_4X);
+static Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_101MS, TCS34725_GAIN_4X);
 
-void sensInit()
+void sens_init()
 {
     extern Adafruit_TCS34725 tcs;
 
@@ -21,13 +21,13 @@ void sensInit()
     }
     else
     {
-        Serial.println("No TCS34725 found ... check your connections");
+        Serial.println("No TCS34725 found ... please connect the color sensor");
         while (1)
             ; // halt!
     }
 }
 
-combat_color_t sensGetColor()
+combat_color_t sens_getColor()
 {
     extern Adafruit_TCS34725 tcs;
 
@@ -47,7 +47,7 @@ combat_color_t sensGetColor()
         2 >= g_frac &&
         3 >= b_frac) //Detect RED
     {
-#if DEBUG
+#if SENS_DEBUG
         Serial.println("RED detected");
 #endif
         return RED;
@@ -58,7 +58,7 @@ combat_color_t sensGetColor()
              12000 <= colorTemp &&
              15000 >= colorTemp) //Detect GREEN
     {
-#if DEBUG
+#if SENS_DEBUG
         Serial.println("GREEN detected");
 #endif
         return GREEN;
@@ -67,7 +67,7 @@ combat_color_t sensGetColor()
              3 >= g_frac &&
              4 <= b_frac) //Detect BLUE
     {
-#if DEBUG
+#if SENS_DEBUG
         Serial.println("BLUE detected");
 #endif
         return BLUE;
@@ -77,14 +77,14 @@ combat_color_t sensGetColor()
              3 >= b_frac &&
              6000 >= colorTemp) //Detect YELLOW
     {
-#if DEBUG
+#if SENS_DEBUG
         Serial.println("YELLOW detected");
 #endif
         return YELLOW;
     }
     else
     {
-#if DEBUG
+#if SENS_DEBUG
         Serial.print("\t");
         Serial.print("Color Temp: ");
         Serial.print(colorTemp, DEC);
@@ -116,7 +116,7 @@ combat_color_t sensGetColor()
     }
 }
 
-void sensFollowLineIR()
+void sens_followLineIR()
 {
 
     // Add code from https://create.arduino.cc/projecthub/mjrobot/line-follower-robot-pid-control-android-setup-e5113a
@@ -141,7 +141,7 @@ void sensFollowLineIR()
     1 0 0 ==> Error = -2
     */
 
-#if DEBUG
+#if SENS_DEBUG
     Serial.print(LFSensor[0]);
     Serial.print(" ");
     Serial.print(LFSensor[1]);
