@@ -3,6 +3,11 @@
 #include <Adafruit_TCS34725.h>
 
 #define SENS_DEBUG 1
+
+#define MOTOR_SPEED_STOP 0
+#define MOTOR_SPEED_MAX 0.1 //0.35
+#define MOTOR_SPEED_TURN 0.25
+
 const int SENS_COLOR_RESOLUTION = 10;
 
 /* Initialise with default values (int time = 2.4ms, gain = 1x) */
@@ -122,12 +127,15 @@ void sens_followLineIR()
     // Add code from https://create.arduino.cc/projecthub/mjrobot/line-follower-robot-pid-control-android-setup-e5113a
 
     int error;
+    float Kp = 0.04;
+
+    //The sensors name goes from "0" (more to the Left) to "2" (more to the Right)
 
     const int lineFollowSensor0 = 22;
     const int lineFollowSensor1 = 24;
     const int lineFollowSensor2 = 26;
 
-    int LFSensor[3] = {0, 0, 0};
+    int LFSensor[3] = {0, 0, 0}; //Left to right
 
     LFSensor[0] = digitalRead(lineFollowSensor0);
     LFSensor[1] = digitalRead(lineFollowSensor1);
@@ -170,17 +178,20 @@ void sens_followLineIR()
              (LFSensor[1] == 0) &&
              (LFSensor[2] == 0))
         error = -2;
-
     else
     {
+        //Buzz when the robot is not on the line
         error = 0;
         AX_BuzzerON();
-        delay(200);
+        delay(25);
         AX_BuzzerOFF();
-        delay(50);
+        delay(475);
     }
 
-    float Kp = 0.05;
-    MOTOR_SetSpeed(LEFT, 0.1 + (Kp * error));
-    MOTOR_SetSpeed(RIGHT, 0.1 - (Kp * error));
+#ifdef SENS_DEBUG
+    Serial.println(error);
+#endif
+
+    MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX + (Kp * error));
+    MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX - (Kp * error));
 }
