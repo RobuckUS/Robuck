@@ -3,7 +3,7 @@
 #include <Adafruit_TCS34725.h>
 
 #define DEBUG 1
-#define COLOR_RESOLUTION 10
+const int SENS_COLOR_RESOLUTION = 10;
 
 /* Initialise with default values (int time = 2.4ms, gain = 1x) */
 // Adafruit_TCS34725 tcs = Adafruit_TCS34725();
@@ -11,7 +11,7 @@
 /* Initialise with specific int time and gain values */
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_101MS, TCS34725_GAIN_4X);
 
-void sensInitColor()
+void sensInit()
 {
     extern Adafruit_TCS34725 tcs;
 
@@ -27,7 +27,7 @@ void sensInitColor()
     }
 }
 
-coreColor_t sensGetColor()
+combat_color_t sensGetColor()
 {
     extern Adafruit_TCS34725 tcs;
 
@@ -39,9 +39,9 @@ coreColor_t sensGetColor()
     colorTemp = tcs.calculateColorTemperature(red, gre, blu);
     lux = tcs.calculateLux(red, gre, blu);
 
-    int r_frac = (int)(((float)red / (uint32_t)clear) * COLOR_RESOLUTION);
-    int g_frac = (int)(((float)gre / (uint32_t)clear) * COLOR_RESOLUTION);
-    int b_frac = (int)(((float)blu / (uint32_t)clear) * COLOR_RESOLUTION);
+    int r_frac = (int)(((float)red / (uint32_t)clear) * SENS_COLOR_RESOLUTION);
+    int g_frac = (int)(((float)gre / (uint32_t)clear) * SENS_COLOR_RESOLUTION);
+    int b_frac = (int)(((float)blu / (uint32_t)clear) * SENS_COLOR_RESOLUTION);
 
     if (3 <= r_frac &&
         2 >= g_frac &&

@@ -1,10 +1,10 @@
 #ifndef SENS_H_
 #define SENS_H_
 
-#include "core.h"
+#include "combat.h"
 
-void sensInitColor();
-coreColor_t sensGetColor();
+void sensInit();
+combat_color_t sensGetColor();
 void sensFollowLineIR();
 
 #endif

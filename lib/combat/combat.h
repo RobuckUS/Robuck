@@ -1,10 +1,10 @@
-#ifndef CORE_H_
-#define CORE_H_
+#ifndef COMBAT_H_
+#define COMBAT_H_
 
-#define coreColorNameMASK 0x03;    //0b 0000 0011
-#define coreColorXMask 0x02;       //0b 0000 0010
-#define coreColorYMask 0x01;       //0b 0000 0001
-#define coreColorInvalidMask 0x80; //0b 1000 0000
+#define combat_ColorNameMASK 0x03;    //0b 0000 0011
+#define combat_ColorXMask 0x02;       //0b 0000 0010
+#define combat_ColorYMask 0x01;       //0b 0000 0001
+#define combat_ColorInvalidMask 0x80; //0b 1000 0000
 
 typedef enum
 {                  //0b ???? ??xy
@@ -22,6 +22,6 @@ typedef enum
     // |R   Y|    |00   10|
     // +-----+    +-------+
 
-} coreColor_t;
+} combat_color_t;
 
 #endif
