@@ -2,6 +2,7 @@
 #include <LibRobus.h>
 #include <Adafruit_TCS34725.h>
 
+
 #define SENS_DEBUG 1
 
 #define MOTOR_SPEED_STOP 0
@@ -127,7 +128,7 @@ void sens_followLineIR()
     // Add code from https://create.arduino.cc/projecthub/mjrobot/line-follower-robot-pid-control-android-setup-e5113a
 
     int error;
-    float Kp = 0.04;
+    float Kp = 0.02; // Jean 0.04 GUY 0.02
 
     //The sensors name goes from "0" (more to the Left) to "2" (more to the Right)
 

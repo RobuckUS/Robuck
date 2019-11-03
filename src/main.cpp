@@ -6,6 +6,8 @@ Inclure les librairies de functions que vous voulez utiliser
 #include <LibRobus.h> // Essentielle pour utiliser RobUS
 #include <sens.h>
 #include <combat.h>
+#include <SharpIR.h>
+
 
 /* ****************************************************************************
 Variables globales et defines
@@ -17,7 +19,7 @@ Variables globales et defines
 const int g_robot_name = JEAN;
 
 /* ****************************************************************************
-Fonctions
+Fonctions 
 **************************************************************************** */
 
 /* ****************************************************************************
@@ -26,8 +28,9 @@ Fonctions d'initialisation
 
 void setup()
 {
+
     BoardInit();
-    sens_init();
+    //sens_init();
     Serial.begin(9600);
     Serial.println("\n\n---RESET---\n");
 
@@ -42,16 +45,17 @@ Fonctions de boucle infini
 void loop()
 {
     // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
-
     switch (g_robot_name)
     {
-    case JEAN:
-        combat_robot1();
+    case GUY:
+        combat_robot1(BLUE);
+        Serial.print("GUY POWER!!");
         break;
 
-    case GUY:
+    case JEAN:
         //delay(60000);
         combat_robot2();
+        Serial.print("Jean Power!!");
         break;
 
     default:
