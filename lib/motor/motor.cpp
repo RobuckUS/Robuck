@@ -182,6 +182,18 @@ MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
 delay(300);
 }
 
+void motor_quickWalk()
+{
+    MOTOR_SetSpeed(LEFT, MOTOR_SPEED_MAX);
+    MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_MAX);
+}
+
+void motor_quickStop()
+{
+    MOTOR_SetSpeed(LEFT, MOTOR_SPEED_STOP);
+    MOTOR_SetSpeed(RIGHT, MOTOR_SPEED_STOP);
+}
+
 /** Control two DC motors to turn
  * 
  * @param angle, reprensents the angle of the robot relative to it direction.

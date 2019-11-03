@@ -25,6 +25,6 @@ typedef enum
 } combat_color_t;
 
 void combat_robot1(combat_color_t);
-void combat_robot2();
+void combat_robot2(combat_color_t);
 
 #endif

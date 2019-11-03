@@ -133,13 +133,8 @@ void sens_followLineIR()
 
     // Add code from https://create.arduino.cc/projecthub/mjrobot/line-follower-robot-pid-control-android-setup-e5113a
 
-<<<<<<< HEAD
-    int error;
-    float Kp = 0.02; // Jean 0.04 GUY 0.02
-=======
     int error = 0;
     float Kp = 0.05;
->>>>>>> 2dc5be2517e22177d4bc6ee38769e956441c03cf
 
     //The sensors name goes from "0" (more to the Left) to "2" (more to the Right)
 
