@@ -21,6 +21,10 @@ void sens_init()
 {
     extern Adafruit_TCS34725 tcs;
 
+    const int lineFollowSensor0 = 22;
+    const int lineFollowSensor1 = 24;
+    const int lineFollowSensor2 = 26;
+
     if (tcs.begin())
     {
         Serial.println("Found sensor");
@@ -28,9 +32,11 @@ void sens_init()
     else
     {
         Serial.println("No TCS34725 found ... please connect the color sensor");
-        while (1)
-            ; // halt!
     }
+
+    pinMode(lineFollowSensor0, INPUT);
+    pinMode(lineFollowSensor1, INPUT);
+    pinMode(lineFollowSensor2, INPUT);
 }
 
 combat_color_t sens_getColor()
@@ -127,14 +133,19 @@ void sens_followLineIR()
 
     // Add code from https://create.arduino.cc/projecthub/mjrobot/line-follower-robot-pid-control-android-setup-e5113a
 
+<<<<<<< HEAD
     int error;
     float Kp = 0.02; // Jean 0.04 GUY 0.02
+=======
+    int error = 0;
+    float Kp = 0.05;
+>>>>>>> 2dc5be2517e22177d4bc6ee38769e956441c03cf
 
     //The sensors name goes from "0" (more to the Left) to "2" (more to the Right)
 
     const int lineFollowSensor0 = 22;
     const int lineFollowSensor1 = 24;
-    const int lineFollowSensor2 = 26;
+    const int lineFollowSensor2 = 37;
 
     int LFSensor[3] = {0, 0, 0}; //Left to right
 
@@ -147,11 +158,13 @@ void sens_followLineIR()
     . = WHITE_NOT_LINE
     0 = BLACK_LINE
     
-    . . 0 ==> Error = 2
-    . 0 0 ==> Error = 1
+    . 0 0 ==> Error = 2
+    . . 0 ==> Error = 1
     . 0 . ==> Error = 0
-    0 0 . ==> Error = -1
-    0 . . ==> Error = -2
+    0 . . ==> Error = -1
+    0 0 . ==> Error = -2
+    . . . ==> All white
+    0 0 0 ==> All black
 
     */
 
@@ -165,11 +178,11 @@ void sens_followLineIR()
 #endif
 
     if ((LFSensor[0] == WHITE_NOT_LINE) &&
-        (LFSensor[1] == WHITE_NOT_LINE) &&
+        (LFSensor[1] == BLACK_LINE) &&
         (LFSensor[2] == BLACK_LINE))
         error = 2;
     else if ((LFSensor[0] == WHITE_NOT_LINE) &&
-             (LFSensor[1] == BLACK_LINE) &&
+             (LFSensor[1] == WHITE_NOT_LINE) &&
              (LFSensor[2] == BLACK_LINE))
         error = 1;
     else if ((LFSensor[0] == WHITE_NOT_LINE) &&
@@ -177,24 +190,19 @@ void sens_followLineIR()
              (LFSensor[2] == WHITE_NOT_LINE))
         error = 0;
     else if ((LFSensor[0] == BLACK_LINE) &&
-             (LFSensor[1] == BLACK_LINE) &&
+             (LFSensor[1] == WHITE_NOT_LINE) &&
              (LFSensor[2] == WHITE_NOT_LINE))
         error = -1;
-    else if ((LFSensor[0] == BLACK) &&
-             (LFSensor[1] == WHITE_NOT_LINE) &&
+    else if ((LFSensor[0] == BLACK_LINE) &&
+             (LFSensor[1] == BLACK_LINE) &&
              (LFSensor[2] == WHITE_NOT_LINE))
         error = -2;
     else
     {
-        //Buzz when the robot is not on the line
-        error = 0;
-        AX_BuzzerON();
-        delay(25);
-        AX_BuzzerOFF();
-        delay(475);
     }
 
 #ifdef SENS_DEBUG
+    Serial.print("\t");
     Serial.println(error);
 #endif
 
