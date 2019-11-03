@@ -155,8 +155,8 @@ void sens_followLineIR()
     . 0 0 ==> Error = 2
     . . 0 ==> Error = 1
     . 0 . ==> Error = 0
-    0 0 . ==> Error = -2
     0 . . ==> Error = -1
+    0 0 . ==> Error = -2
     . . . ==> All white
     0 0 0 ==> All black
 
