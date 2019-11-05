@@ -16,7 +16,7 @@ Variables globales et defines
 #define JEAN 31
 #define GUY 43
 
-const int g_robot_name = GUY;
+const int g_robot_name = JEAN;
 
 /* ****************************************************************************
 Fonctions 
@@ -35,8 +35,13 @@ void setup()
     Serial.println("\n\n---RESET---\n");
 
     while (!ROBUS_IsBumper(REAR))
-        ; //Wait for rear bumper press
-
+    {
+        if(ROBUS_IsBumper(LEFT))
+        {
+            sens_getColor();    
+        }
+        //Wait for rear bumper press
+    }
     //Go to War()
     switch (g_robot_name)
     {
@@ -59,6 +64,7 @@ void setup()
         combat_robot2(YELLOW);
         Serial.print("Guy Power!!");
         break;
+        
 
     default:
         Serial.println("The should be a name to the robot. Please set g_robot_name");

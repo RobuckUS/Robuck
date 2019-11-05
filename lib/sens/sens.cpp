@@ -1,7 +1,7 @@
 #include "sens.h"
 #include <LibRobus.h>
 #include <Adafruit_TCS34725.h>
-
+#include <motor.h>
 
 #define SENS_DEBUG 1
 
@@ -192,9 +192,7 @@ void sens_followLineIR()
              (LFSensor[1] == BLACK_LINE) &&
              (LFSensor[2] == WHITE_NOT_LINE))
         error = -2;
-    else
-    {
-    }
+    
 
 #ifdef SENS_DEBUG
     Serial.print("\t");
