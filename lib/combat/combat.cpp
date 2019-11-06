@@ -5,6 +5,8 @@
 #include <LibRobus.h>
 
 
+
+#define angleServo 110
 #define lineFollowSensor0 22
 #define lineFollowSensor1 24
 #define lineFollowSensor2 37
@@ -17,14 +19,136 @@ void combat_robot1(combat_color_t ColorToGo)
     switch (ColorToGo)
     {
     case RED:
-     
+         motor_turn(-90);
+        motor_walk(10);
+        Serial.println(digitalRead(lineFollowSensor1));
+                Serial.println(digitalRead(lineFollowSensor1));
+
+        while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        motor_quickStop();
+        delay(200);
+        motor_turn(90);
+        motor_walk(40);
+        while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        motor_walk(3);
+        motor_turn(-40);
+
+        while(1){
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    motor_turn(-5);
+                    motor_walk(7);
+                    SERVO_SetAngle(0,angleServo);
+                    break;
+                }
+            }
+            delay(2000);
+        MOTOR_SetSpeed(LEFT, -0.2);
+        MOTOR_SetSpeed(RIGHT, -0.2);
+        delay(2000);
+        MOTOR_SetSpeed(LEFT, 0);
+        MOTOR_SetSpeed(RIGHT, 0);
+        motor_turn(195);
+        while(1){
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    SERVO_SetAngle(0,0);
+                    MOTOR_SetSpeed(LEFT, -0.0);
+                     MOTOR_SetSpeed(RIGHT, -0.0);
+                    break;
+                }
+            }
+
+            MOTOR_SetSpeed(LEFT, -0.2);
+            MOTOR_SetSpeed(RIGHT, -0.2);
+            delay(4000);
+            motor_quickStop();
+        SERVO_SetAngle(0, 1);
         break;
     case GREEN:
+        motor_turn(90);
+        motor_walk(10);
+        Serial.println(digitalRead(lineFollowSensor1));
+                Serial.println(digitalRead(lineFollowSensor1));
 
-        break;
+        while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        motor_quickStop();
+        delay(200);
+        motor_turn(-90);
+        motor_walk(40);
+        while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        motor_walk(3);
+        motor_turn(40);
+
+        while(1){
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    motor_turn(-5);
+                    motor_walk(7);
+                    SERVO_SetAngle(0,angleServo);
+                    break;
+                }
+            }
+            delay(2000);
+        MOTOR_SetSpeed(LEFT, -0.2);
+        MOTOR_SetSpeed(RIGHT, -0.2);
+        delay(2000);
+        MOTOR_SetSpeed(LEFT, 0);
+        MOTOR_SetSpeed(RIGHT, 0);
+        motor_turn(195);
+        while(1){
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    SERVO_SetAngle(0,0);
+                    MOTOR_SetSpeed(LEFT, -0.0);
+                     MOTOR_SetSpeed(RIGHT, -0.0);
+                    break;
+                }
+            }
+
+            MOTOR_SetSpeed(LEFT, -0.2);
+            MOTOR_SetSpeed(RIGHT, -0.2);
+            delay(4000);
+            motor_turn(90);
+            motor_walk(100);
+            motor_quickStop();
+        SERVO_SetAngle(0, 1);
+        break; 
     case BLUE:
         motor_turn(90);
-        motor_walk(5);
+        motor_walk(10);
         Serial.println(digitalRead(lineFollowSensor1));
                 Serial.println(digitalRead(lineFollowSensor1));
 
@@ -41,40 +165,49 @@ void combat_robot1(combat_color_t ColorToGo)
         MOTOR_SetSpeed(RIGHT, 0.0);
         motor_walk(1);
         motor_turn(38);
-        motor_walk(3);
         while(1){
             sens_followLineIR();
             if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
                 {
-                    motor_walk(6);
-                    SERVO_SetAngle(0,90);
+                    motor_turn(-5);
+                    motor_walk(7);
+                    SERVO_SetAngle(0,angleServo);
+                    break;
+                }
+            }
+            delay(2000);
+        MOTOR_SetSpeed(LEFT, -0.2);
+        MOTOR_SetSpeed(RIGHT, -0.2);
+        delay(2000);
+        MOTOR_SetSpeed(LEFT, 0);
+        MOTOR_SetSpeed(RIGHT, 0);
+        motor_turn(195);
+        while(1){
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    SERVO_SetAngle(0,0);
+                    MOTOR_SetSpeed(LEFT, -0.0);
+                     MOTOR_SetSpeed(RIGHT, -0.0);
                     break;
                 }
             }
 
-        
-        motor_quickStop();
-        delay(200);
-        motor_quickWalk();
-        delay(500);
-        motor_quickStop();
-        delay(200);
-        motor_turn(180);
-        while(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
-        {
-            sens_followLineIR();
-        }
+            MOTOR_SetSpeed(LEFT, -0.2);
+            MOTOR_SetSpeed(RIGHT, -0.2);
+            delay(4000);
+            motor_quickStop();
         SERVO_SetAngle(0, 1);
         break;
     case YELLOW:
         motor_turn(-90);
-        motor_walk(5);
+        motor_walk(10);
         Serial.println(digitalRead(lineFollowSensor1));
                 Serial.println(digitalRead(lineFollowSensor1));
 
         while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
         {
-         Serial.println(digitalRead(lineFollowSensor1));
+             Serial.println(digitalRead(lineFollowSensor1));
 
             MOTOR_SetSpeed(LEFT, 0.4);
             MOTOR_SetSpeed(RIGHT, 0.4);
@@ -85,21 +218,40 @@ void combat_robot1(combat_color_t ColorToGo)
         MOTOR_SetSpeed(RIGHT, 0.0);
         motor_walk(1);
         motor_turn(-38);
-
-        while(sens_getColor()!=0x02|| sens_getColor()!=BLUE || sens_getColor()!=RED || sens_getColor()!=GREEN)
-        {
+        while(1){
             sens_followLineIR();
-            if(sens_getColor()!=0x02)
-            {
-                break;
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    motor_turn(5);
+                    motor_walk(7);
+                    SERVO_SetAngle(0,angleServo);
+                    break;
+                }
             }
-        }
+            delay(2000);
+        MOTOR_SetSpeed(LEFT, -0.2);
+        MOTOR_SetSpeed(RIGHT, -0.2);
+        delay(2000);
+        MOTOR_SetSpeed(LEFT, 0);
+        MOTOR_SetSpeed(RIGHT, 0);
+        motor_turn(190);
+        while(1){
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    SERVO_SetAngle(0,0);
+                    MOTOR_SetSpeed(LEFT, -0.0);
+                     MOTOR_SetSpeed(RIGHT, -0.0);
+                    break;
+                }
+            }
+            delay(2000);
 
-        MOTOR_SetSpeed(LEFT, 0.0);
-        MOTOR_SetSpeed(RIGHT, 0.0);
-        motor_walk(8);
-        SERVO_SetAngle(0,0);
-        break;
+            MOTOR_SetSpeed(LEFT, -0.2);
+            MOTOR_SetSpeed(RIGHT, -0.2);
+            delay(4000);
+            motor_quickStop();
+        SERVO_SetAngle(0, 1);
     default:
         break;
     }
@@ -132,8 +284,30 @@ void combat_robot2(combat_color_t ColorToGo)
         break;
     case YELLOW:
         motor_turn(-90);
-        motor_walk(40);
-        motor_turn(135);
+        motor_walk(10);
+        while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        
+        MOTOR_SetSpeed(LEFT, 0.0);
+        MOTOR_SetSpeed(RIGHT, 0.0);
+        delay(200);
+        motor_turn(140);
+        while(1)
+        {
+            sens_followLineIR();
+            if(lineFollowSensor0 ==BLACK_LINE && lineFollowSensor1==BLACK_LINE &&lineFollowSensor2 == BLACK_LINE){
+                motor_quickStop();
+                break;
+            }
+        }
+        motor_walk(220);
+
         break;
     default:
         break;
@@ -147,17 +321,4 @@ void combat_robot2(combat_color_t ColorToGo)
     motor_walk(5);
 }
 
-/*SharpIR mySensor = SharpIR(4,1080);
-int distance_cm;*/
-    //int angleFindBall = 0;
-    /*while (mySensor.distance() > 40){
-        angleFindBall += 5;
-        if(angleFindBall >= 0 && angleFindBall >= 90){
-            angleFindBall += 5;
-        }else
-        {
-            angleFindBall -= 5;
-        }
-        motor_turn(angleFindBall);
-    }
-    motor_walk(mySensor.distance -2);*/
+ 

@@ -1,6 +1,7 @@
 #include <LibRobus.h>
 #include "motor.h"
 
+
 #define JEAN 31
 #define GUY 43
 
@@ -293,6 +294,7 @@ int32_t cm2pulse(float cm)
     return nb_tour * 3200;
 }
 
+
 /** Convert angle (degree) to number of pulse
 */
 int32_t angl2pulse(float angle)
@@ -303,3 +305,4 @@ int32_t angl2pulse(float angle)
     Serial.println(distance);
     return nb_pulse;
 }
+

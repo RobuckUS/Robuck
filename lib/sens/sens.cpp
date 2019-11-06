@@ -6,7 +6,7 @@
 #define SENS_DEBUG 1
 
 #define MOTOR_SPEED_STOP 0
-#define MOTOR_SPEED_MAX 0.1 //0.35
+#define MOTOR_SPEED_MAX 0.17 //0.35
 #define MOTOR_SPEED_TURN 0.25
 
 const int SENS_COLOR_RESOLUTION = 10;
@@ -192,7 +192,10 @@ void sens_followLineIR()
              (LFSensor[1] == BLACK_LINE) &&
              (LFSensor[2] == WHITE_NOT_LINE))
         error = -2;
-    
+    else if ((LFSensor[0] == BLACK_LINE) &&
+             (LFSensor[1] == BLACK_LINE) &&
+             (LFSensor[2] == BLACK_LINE))
+        motor_walk(5);
 
 #ifdef SENS_DEBUG
     Serial.print("\t");
