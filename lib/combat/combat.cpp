@@ -9,6 +9,9 @@
 #define lineFollowSensor1 24
 #define lineFollowSensor2 37
 
+void follow_line_until_all_black_line_THEN_stop();
+void race_for_5_a_8_DASF_Unreal();
+
 void combat_robot1(combat_color_t ColorToGo)
 {
     //ServoMoteur
@@ -254,7 +257,9 @@ void combat_robot1(combat_color_t ColorToGo)
         while (1)
         {
             sens_followLineIR();
-            if (digitalRead(lineFollowSensor1) == BLACK_LINE && digitalRead(lineFollowSensor0) == BLACK_LINE && digitalRead(lineFollowSensor1) == BLACK_LINE)
+            if (digitalRead(lineFollowSensor1) == BLACK_LINE &&
+                digitalRead(lineFollowSensor0) == BLACK_LINE &&
+                digitalRead(lineFollowSensor1) == BLACK_LINE)
             {
                 SERVO_SetAngle(0, 0);
                 MOTOR_SetSpeed(LEFT, -0.0);
@@ -282,16 +287,43 @@ void combat_robot2(combat_color_t ColorToGo)
     switch (ColorToGo)
     {
     case RED:
+        MOTOR_SetSpeed(LEFT, -0.3);
+        MOTOR_SetSpeed(RIGHT, -0.3);
+        delay(900);
+
+        motor_quickStop();
         motor_turn(-90);
-        motor_walk(40);
-        motor_turn(90);
-        motor_walk(75);
+        motor_walk(10);
+
+        while (digitalRead(lineFollowSensor1) == WHITE_NOT_LINE)
+        {
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+        }
+
+        MOTOR_SetSpeed(LEFT, 0.0);
+        MOTOR_SetSpeed(RIGHT, 0.0);
+        motor_turn(88);
+        motor_walk(80);
+
+        while (digitalRead(lineFollowSensor1) == WHITE_NOT_LINE)
+        {
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+        }
+        MOTOR_SetSpeed(LEFT, 0.0);
+        MOTOR_SetSpeed(RIGHT, 0.0);
+        motor_walk(7);
+        delay(200);
+
         motor_turn(135);
+
+        follow_line_until_all_black_line_THEN_stop();
         break;
 
     case GREEN:
-        MOTOR_SetSpeed(1, -0.3);
-        MOTOR_SetSpeed(0, -0.3);
+        MOTOR_SetSpeed(LEFT, -0.3);
+        MOTOR_SetSpeed(RIGHT, -0.3);
         delay(900);
 
         motor_quickStop();
@@ -321,30 +353,12 @@ void combat_robot2(combat_color_t ColorToGo)
 
         motor_turn(-135);
 
-        while (digitalRead(lineFollowSensor1) != BLACK_LINE &&
-               digitalRead(lineFollowSensor0) != BLACK_LINE &&
-               digitalRead(lineFollowSensor1) != BLACK_LINE)
-        {
-            sens_followLineIR();
-        }
-        motor_walk(32);
-
-        while (1)
-        {
-            sens_followLineIR();
-            if (digitalRead(lineFollowSensor1) == BLACK_LINE &&
-                digitalRead(lineFollowSensor0) == BLACK_LINE &&
-                digitalRead(lineFollowSensor1) == BLACK_LINE)
-            {
-                motor_quickStop();
-                break;
-            }
-        }
+        follow_line_until_all_black_line_THEN_stop();
         break;
 
     case BLUE:
-        MOTOR_SetSpeed(1, -0.3);
-        MOTOR_SetSpeed(0, -0.3);
+        MOTOR_SetSpeed(LEFT, -0.3);
+        MOTOR_SetSpeed(RIGHT, -0.3);
         delay(1000);
 
         motor_quickStop();
@@ -363,35 +377,12 @@ void combat_robot2(combat_color_t ColorToGo)
         motor_turn(-135);
         delay(200);
 
-        while (1)
-        {
-            sens_followLineIR();
-            if (digitalRead(lineFollowSensor1) == BLACK_LINE &&
-                digitalRead(lineFollowSensor0) == BLACK_LINE &&
-                digitalRead(lineFollowSensor2) == BLACK_LINE)
-            {
-                motor_quickStop();
-                break;
-            }
-        }
-
-        while (1)
-        {
-            MOTOR_SetSpeed(0, 1);
-            MOTOR_SetSpeed(1, 1);
-            if (digitalRead(lineFollowSensor1) == BLACK_LINE &&
-                digitalRead(lineFollowSensor0) == BLACK_LINE &&
-                digitalRead(lineFollowSensor2) == BLACK_LINE)
-            {
-                motor_quickStop();
-                break;
-            }
-        }
+        follow_line_until_all_black_line_THEN_stop();
         break;
 
     case YELLOW:
-        MOTOR_SetSpeed(1, -0.3);
-        MOTOR_SetSpeed(0, -0.3);
+        MOTOR_SetSpeed(LEFT, -0.3);
+        MOTOR_SetSpeed(RIGHT, -0.3);
         delay(1000);
 
         motor_quickStop();
@@ -412,35 +403,32 @@ void combat_robot2(combat_color_t ColorToGo)
         motor_turn(135);
         delay(200);
 
-        while (1)
-        {
-            sens_followLineIR();
-            if (digitalRead(lineFollowSensor1) == BLACK_LINE &&
-                digitalRead(lineFollowSensor0) == BLACK_LINE &&
-                digitalRead(lineFollowSensor2) == BLACK_LINE)
-            {
-                motor_quickStop();
-                break;
-            }
-        }
-
-        motor_walk(32);
-
-        while (1)
-        {
-            MOTOR_SetSpeed(0, 1);
-            MOTOR_SetSpeed(1, 1);
-            if (digitalRead(lineFollowSensor1) == BLACK_LINE &&
-                digitalRead(lineFollowSensor0) == BLACK_LINE &&
-                digitalRead(lineFollowSensor2) == BLACK_LINE)
-            {
-                motor_quickStop();
-                break;
-            }
-        }
+        follow_line_until_all_black_line_THEN_stop();
         break;
 
     default:
         break;
     }
+
+    race_for_5_a_8_DASF_Unreal();
+}
+
+void follow_line_until_all_black_line_THEN_stop()
+{
+    while (!(digitalRead(lineFollowSensor0) == BLACK_LINE &&
+             digitalRead(lineFollowSensor1) == BLACK_LINE &&
+             digitalRead(lineFollowSensor2) == BLACK_LINE))
+    {
+        sens_followLineIR();
+    }
+    motor_quickStop();
+}
+
+void race_for_5_a_8_DASF_Unreal()
+{
+    MOTOR_SetSpeed(LEFT, 0.7);
+    MOTOR_SetSpeed(RIGHT, 0.7);
+    delay(2250);
+
+    motor_quickStop();
 }
