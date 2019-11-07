@@ -4,7 +4,7 @@
 #include <SharpIR.h>
 #include <LibRobus.h>
 
-#define angleServo 110
+#define angleServo 115
 #define lineFollowSensor0 22
 #define lineFollowSensor1 24
 #define lineFollowSensor2 37
@@ -411,7 +411,7 @@ void race_for_5_a_8_DASF_Unreal()
 {
     MOTOR_SetSpeed(LEFT, 0.7);
     MOTOR_SetSpeed(RIGHT, 0.7);
-    delay(2250);
+    delay(2500);
 
     motor_quickStop();
 }
