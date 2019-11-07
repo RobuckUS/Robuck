@@ -142,18 +142,10 @@ void combat_robot1(combat_color_t ColorToGo)
                 SERVO_SetAngle(0, 0);
                 MOTOR_SetSpeed(LEFT, -0.0);
                 MOTOR_SetSpeed(RIGHT, -0.0);
+                delay(1000);
                 break;
             }
         }
-
-        MOTOR_SetSpeed(LEFT, -0.2);
-        MOTOR_SetSpeed(RIGHT, -0.2);
-        delay(4000);
-
-        motor_turn(90);
-        motor_walk(100);
-        motor_quickStop();
-        SERVO_SetAngle(0, 1);
         break;
 
     case BLUE:
@@ -202,18 +194,12 @@ void combat_robot1(combat_color_t ColorToGo)
                 digitalRead(lineFollowSensor2) == BLACK_LINE)
             {
                 SERVO_SetAngle(0, 0);
-                MOTOR_SetSpeed(LEFT, -0.0);
-                MOTOR_SetSpeed(RIGHT, -0.0);
+                MOTOR_SetSpeed(LEFT, 0.0);
+                MOTOR_SetSpeed(RIGHT, 0.0);
+                delay(1000);
                 break;
             }
         }
-
-        MOTOR_SetSpeed(LEFT, -0.2);
-        MOTOR_SetSpeed(RIGHT, -0.2);
-        delay(4000);
-
-        motor_quickStop();
-        SERVO_SetAngle(0, 1);
         break;
 
     case YELLOW:
@@ -262,24 +248,21 @@ void combat_robot1(combat_color_t ColorToGo)
                 digitalRead(lineFollowSensor1) == BLACK_LINE)
             {
                 SERVO_SetAngle(0, 0);
-                MOTOR_SetSpeed(LEFT, -0.0);
-                MOTOR_SetSpeed(RIGHT, -0.0);
+                motor_quickStop();
+                delay(1000);
                 break;
             }
         }
-        delay(2000);
-
-        MOTOR_SetSpeed(LEFT, -0.2);
-        MOTOR_SetSpeed(RIGHT, -0.2);
-        delay(4000);
-
-        motor_quickStop();
-        SERVO_SetAngle(0, 1);
+        
         break;
 
     default:
         break;
     }
+    MOTOR_SetSpeed(LEFT, -0.2);
+    MOTOR_SetSpeed(RIGHT, -0.2);
+    delay(6000);
+    motor_quickStop();
 }
 
 void combat_robot2(combat_color_t ColorToGo)
