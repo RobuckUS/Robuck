@@ -23,8 +23,8 @@ Variables globales et defines
 const int g_robot_name = JEAN;
 
 //Choose RED, GREEN, BLUE or YELLOW
-const combat_color_t targetColor1 = RED;
-const combat_color_t targetColor2 = RED;
+const combat_color_t targetColor1 = GREEN;
+const combat_color_t targetColor2 = BLUE;
 
 /* ****************************************************************************
 Fonctions
