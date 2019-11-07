@@ -253,7 +253,7 @@ void combat_robot1(combat_color_t ColorToGo)
                 break;
             }
         }
-        
+
         break;
 
     default:
@@ -409,9 +409,11 @@ void follow_line_until_all_black_line_THEN_stop()
 
 void race_for_5_a_8_DASF_Unreal()
 {
+    AX_BuzzerON();
     MOTOR_SetSpeed(LEFT, 0.7);
     MOTOR_SetSpeed(RIGHT, 0.7);
     delay(2500);
 
     motor_quickStop();
+    AX_BuzzerOFF();
 }
