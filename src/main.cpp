@@ -16,14 +16,14 @@ Variables globales et defines
 #define JEAN 31
 #define GUY 43
 
-#define DELAY false
+#define DELAY true
 #define BUZZER true
 
 //Choose JEAN or GUY
 const int g_robot_name = JEAN;
 
 //Choose RED, GREEN, BLUE or YELLOW
-const combat_color_t targetColor1 = GREEN;
+const combat_color_t targetColor1 = RED;
 const combat_color_t targetColor2 = RED;
 
 /* ****************************************************************************
