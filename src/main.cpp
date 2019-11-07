@@ -17,6 +17,7 @@ Variables globales et defines
 #define GUY 43
 
 #define DELAY false
+#define BUZZER true
 
 //Choose JEAN or GUY
 const int g_robot_name = JEAN;
@@ -28,6 +29,26 @@ const combat_color_t targetColor2 = RED;
 /* ****************************************************************************
 Fonctions
 **************************************************************************** */
+
+void waitBumper(uint8_t bumper)
+{
+    while (!ROBUS_IsBumper(bumper))
+    {
+    }
+
+#if BUZZER
+    for (int i = 0; i < 3; i++)
+    {
+        AX_BuzzerON();
+        delay(100);
+        AX_BuzzerOFF();
+        delay(400);
+    }
+    AX_BuzzerON();
+#endif
+    delay(500);
+    AX_BuzzerOFF();
+}
 
 /* ****************************************************************************
 Fonctions d'initialisation
@@ -49,8 +70,7 @@ void loop()
 {
     // SOFT_TIMER_Update(); // A decommenter pour utiliser des compteurs logiciels
 
-    while (!ROBUS_IsBumper(REAR))
-        ; //Wait for rear bumper press
+    waitBumper(REAR);
 
     switch (g_robot_name)
     {
