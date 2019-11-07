@@ -192,10 +192,6 @@ void sens_followLineIR()
              (LFSensor[1] == BLACK_LINE) &&
              (LFSensor[2] == WHITE_NOT_LINE))
         error = -2;
-    else if ((LFSensor[0] == BLACK_LINE) &&
-             (LFSensor[1] == BLACK_LINE) &&
-             (LFSensor[2] == BLACK_LINE))
-        motor_walk(5);
 
 #ifdef SENS_DEBUG
     Serial.print("\t");

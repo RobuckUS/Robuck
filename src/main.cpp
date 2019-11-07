@@ -15,8 +15,9 @@ Variables globales et defines
 
 #define JEAN 31
 #define GUY 43
+#define debugg 100
 
-const int g_robot_name = GUY;
+const int g_robot_name = GUY ;
 
 /* ****************************************************************************
 Fonctions 
@@ -27,7 +28,7 @@ Fonctions d'initialisation
 **************************************************************************** */
 
 void setup()
-{
+{ 
 
     BoardInit();
     sens_init();
@@ -35,43 +36,7 @@ void setup()
     Serial.println("\n\n---RESET---\n");
 
     //Go to War()
-    switch (g_robot_name)
-    {
-    case JEAN:
-        Serial.print("Jean POWER!!");
-        if(ROBUS_IsBumper(LEFT))
-        {
-            combat_robot1(YELLOW );
-        }
-        if(ROBUS_IsBumper(RIGHT))
-        {
-             combat_robot1(BLUE );
-
-        }
-        if(ROBUS_IsBumper(FRONT))
-        {
-            combat_robot1(GREEN);
-        }
-        if(ROBUS_IsBumper(REAR))
-        {
-            combat_robot1(RED);
-        }
-        break;
-
-    case GUY:
     
-        if(ROBUS_IsBumper(REAR))
-        {
-            combat_robot2(YELLOW);
-        }
-        break;
-        
-
-    default:
-        Serial.println("The should be a name to the robot. Please set g_robot_name");
-       
-        break;
-    }
 }
 
 /* ****************************************************************************
@@ -107,10 +72,28 @@ void loop()
     case GUY:
         if(ROBUS_IsBumper(LEFT))
         {
+            
+            while(1)
+            {
+                sens_followLineIR();
+            }        
+        }
+        if(ROBUS_IsBumper(RIGHT))
+        {
             combat_robot2(YELLOW);
         }
         break;
-        
+    case debugg:
+        if(ROBUS_IsBumper(REAR))
+        {
+            SERVO_SetAngle(1,0);
+        }
+
+        if(ROBUS_IsBumper(FRONT))
+        {
+            SERVO_SetAngle(1, 90);
+        }
+    break;
 
     default:
         Serial.println("The should be a name to the robot. Please set g_robot_name");

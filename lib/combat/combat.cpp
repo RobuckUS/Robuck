@@ -19,7 +19,7 @@ void combat_robot1(combat_color_t ColorToGo)
     switch (ColorToGo)
     {
     case RED:
-         motor_turn(-90);
+        motor_turn(-90);
         motor_walk(10);
         Serial.println(digitalRead(lineFollowSensor1));
                 Serial.println(digitalRead(lineFollowSensor1));
@@ -35,7 +35,7 @@ void combat_robot1(combat_color_t ColorToGo)
         motor_quickStop();
         delay(200);
         motor_turn(90);
-        motor_walk(40);
+        motor_walk(55);
         while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
         {
              Serial.println(digitalRead(lineFollowSensor1));
@@ -98,7 +98,7 @@ void combat_robot1(combat_color_t ColorToGo)
         motor_quickStop();
         delay(200);
         motor_turn(-90);
-        motor_walk(40);
+        motor_walk(55);
         while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
         {
              Serial.println(digitalRead(lineFollowSensor1));
@@ -184,7 +184,7 @@ void combat_robot1(combat_color_t ColorToGo)
         motor_turn(195);
         while(1){
             sens_followLineIR();
-            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor2)==BLACK_LINE)
                 {
                     SERVO_SetAngle(0,0);
                     MOTOR_SetSpeed(LEFT, -0.0);
@@ -252,6 +252,7 @@ void combat_robot1(combat_color_t ColorToGo)
             delay(4000);
             motor_quickStop();
         SERVO_SetAngle(0, 1);
+        break;
     default:
         break;
     }
@@ -271,18 +272,104 @@ void combat_robot2(combat_color_t ColorToGo)
         motor_turn(135);        
         break;
     case GREEN:
+        MOTOR_SetSpeed(1, -0.3);
+        MOTOR_SetSpeed(0, -0.3);
+        delay(900);
+        motor_quickStop();
         motor_turn(90);
-        motor_walk(40);
-        motor_turn(-90);
-        motor_walk(75);
+        motor_walk(10);
+        while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        
+        MOTOR_SetSpeed(LEFT, 0.0);
+        MOTOR_SetSpeed(RIGHT, 0.0);
+        motor_turn(-88);
+        motor_walk(80);
+         while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        MOTOR_SetSpeed(LEFT, 0.0);
+        MOTOR_SetSpeed(RIGHT, 0.0);
+        motor_walk(7); 
+        delay(200);
         motor_turn(-135);
+        while(  digitalRead(lineFollowSensor1)!=BLACK_LINE &&digitalRead(lineFollowSensor0)!=BLACK_LINE && digitalRead(lineFollowSensor1)!=BLACK_LINE)
+        {
+            sens_followLineIR();
+        }
+        motor_walk(32);
+        while(1){
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor1)==BLACK_LINE)
+                {
+                    motor_quickStop();
+                    break;
+                }
+            }
+        
         break;
     case BLUE:
+        MOTOR_SetSpeed(1, -0.3);
+        MOTOR_SetSpeed(0, -0.3);
+        delay(1000);
+        motor_quickStop();
         motor_turn(90);
-        motor_walk(40);
+        motor_walk(10);
+        while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
+        {
+             Serial.println(digitalRead(lineFollowSensor1));
+
+            MOTOR_SetSpeed(LEFT, 0.4);
+            MOTOR_SetSpeed(RIGHT, 0.4);
+            
+        }
+        
+        MOTOR_SetSpeed(LEFT, 0.0);
+        MOTOR_SetSpeed(RIGHT, 0.0);
+        motor_walk(7); 
         motor_turn(-135);
-        break;
+        delay(200);
+        while(1)
+        {
+            sens_followLineIR();
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor2)==BLACK_LINE)
+            {
+                motor_quickStop();
+                break;
+            }
+        }
+
+        
+
+       while(1)
+        {
+            MOTOR_SetSpeed(0, 1);
+            MOTOR_SetSpeed(1,1);
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor2)==BLACK_LINE)
+            {
+                motor_quickStop();
+                break;
+            }
+        }
+
+         break;
+        
     case YELLOW:
+        MOTOR_SetSpeed(1, -0.3);
+        MOTOR_SetSpeed(0, -0.3);
+        delay(1000);
+        motor_quickStop();
         motor_turn(-90);
         motor_walk(10);
         while(digitalRead(lineFollowSensor1)==WHITE_NOT_LINE )
@@ -296,21 +383,34 @@ void combat_robot2(combat_color_t ColorToGo)
         
         MOTOR_SetSpeed(LEFT, 0.0);
         MOTOR_SetSpeed(RIGHT, 0.0);
+        motor_walk(7); 
         delay(200);
-        motor_turn(140);
+        motor_turn(135);
+        delay(200);
         while(1)
         {
             sens_followLineIR();
-            if(lineFollowSensor0 ==BLACK_LINE && lineFollowSensor1==BLACK_LINE &&lineFollowSensor2 == BLACK_LINE){
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor2)==BLACK_LINE)
+            {
                 motor_quickStop();
                 break;
             }
         }
-        motor_walk(220);
 
+        while(1)
+        {
+            MOTOR_SetSpeed(0, 1);
+            MOTOR_SetSpeed(1,1);
+            if(digitalRead(lineFollowSensor1)==BLACK_LINE &&digitalRead(lineFollowSensor0)==BLACK_LINE && digitalRead(lineFollowSensor2)==BLACK_LINE)
+            {
+                motor_quickStop();
+                break;
+            }
+        }
         break;
-    default:
+        default:
         break;
+    
     }
 
     while(/*sens_getColor() ==  ColorToGo*/!ROBUS_IsBumper(FRONT))
