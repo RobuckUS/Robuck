@@ -342,10 +342,10 @@ void combat_robot2(combat_color_t ColorToGo)
     case BLUE:
         MOTOR_SetSpeed(LEFT, -0.3);
         MOTOR_SetSpeed(RIGHT, -0.3);
-        delay(1000);
+        delay(800);
 
         motor_quickStop();
-        motor_turn(90);
+        motor_turn(87);
         motor_walk(10);
 
         while (digitalRead(lineFollowSensor1) == WHITE_NOT_LINE)
